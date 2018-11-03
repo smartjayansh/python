@@ -1,20 +1,14 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <title>
-            Google Books Api
-        </title>
-        <link rel="stylesheet" type="text/css" href="../static/final.css">
-    </head>
-    <body>
-            <h1>Book Finder</h1>
-            <input id="search" placeholder="Title or Author">
-            <input id="title" placeholder="Title">
+{% extends "layout.html" %}
+{% block title %}
+    Google Books Api
+{% endblock %}
+    <link rel="stylesheet" type="text/css" href="../static/final.css">
 
-            <button id="button" type="button">Click Me</button>
-            <div id="results"></div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="main.js"></script>
-    </body>
-</html>
+{% block body %}
+    <h1>Book Finder</h1>
+    <form action="{{url_for('search')}}" method="post">
+        <input id="search" name="abc" placeholder="Title or Author">
+        <input id="title" name="tit" placeholder="Title">
+        <button id="button" type="submit">Click Me</button>
+    </form>
+{% endblock %}
