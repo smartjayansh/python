@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block body %}
-    <h2>{{message}}</h2>
+{% for item in books %}
+    <h2>{{ item.bookid }}</h2>
+{% endfor %}
+
 {% endblock %}

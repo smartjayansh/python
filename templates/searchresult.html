@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <head>
 <title>Book Store</title>
-<link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+<link href="../static/templatemo_style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
 <div id="templatemo_container">
 	<div id="templatemo_menu">
     	<ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="{{ url_for('transfer')}}">Home</a></li>
             <li><a href="#" class="current">Search</a></li>
-            <li><a href="index.html">Books</a></li>            
-            <li><a href="index.html">New Releases</a></li>  
+            <li><a href="indexfinal.html">Books</a></li>            
+            <li><a href="indexfinal.html">New Releases</a></li>  
             <li><a href="#">Company</a></li> 
             <li><a href="#">Contact</a></li>
+            <li><a href="{{url_for('mybooks')}}">MyBooks</a></li> 
+
     	</ul>
     </div> <!-- end of menu -->
     
-    <div id="templatemo_header">
+    <!-- <div id="templatemo_header">
     	<div id="templatemo_special_offers">
         	<p>
                 <span>25%</span> discounts for
@@ -41,7 +43,10 @@
     	
         <div id="templatemo_content_left">
         	<div class="templatemo_content_left_section">
-            	
+                <form action="{{url_for('search')}}" method="post">
+                        <input id="title" name="tit" placeholder="Title">
+                        <button id="button" type="submit">Click Me</button>
+                </form>
             </div>
 			<div class="templatemo_content_left_section">
             	
@@ -52,19 +57,21 @@
         </div> 
         
         <div id="templatemo_content_right">
+            {% for i in range(0,3) %}
         	
-            <h1>Book Title <span>(by author name)</span></h1>
-            <div class="image_panel"><img src="images/templatemo_image_02.jpg" alt="CSS Template" width="100" height="150" /></div>
-          <h2>Read the lessons - Watch the videos - Do the exercises</h2>
+            <h1>{{title[i]}}</h1>
+            <div class="image_panel"><img src="{{imglink[i]}}" alt="Book cover" width="100" height="150" /></div>
+          
             <ul>
-	            <li>By Deke <a href="#">McClelland</a></li>
-            	<li>January 2024</li>
-                <li>Pages: 498</li>
-                <li>ISBN 10: 0-496-91612-0 | ISBN 13: 9780492518154</li>
+                <li>{{author[i]}}</li>
+                <li><form action="{{url_for('details')}}" method="post">
+                    <input type="text" value="{{isbn10[i]}}" name="isbn">
+                    <button  type="submit" >Details</button>
+                </form></li>
             </ul>
              <div class="cleaner_with_height">&nbsp;</div>
-            
-             <a href="subpage.html"><img src="images/book1.gif" alt="ads" height="200px" width="100%"/></a>
+            {% endfor %}
+             <a href="subpage.html"><img src="../static/images/book1.gif" alt="ads" height="200px" width="100%"/></a>
             </div> <!-- end of content right -->
         
     

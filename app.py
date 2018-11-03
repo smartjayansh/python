@@ -42,36 +42,118 @@ def login():
         message="invalid username and/or password"
         return render_template("success.html",message=message)
     message="login successful"
-    # return render_template("success.html",message=message)
-    return render_template('practice.html',user = session['username'],password = session['password'])
+    title=[]
+    descr=[]
+    sub=["comedy","adventure","technology","cooking"]
+    imglink=[]
+    for i in range(0,4):
+        if i<1:
+            result = lookupsub(sub[0])
+        elif i<2:
+            result = lookupsub(sub[1])
+        elif i<3:     
+            result = lookupsub(sub[2])
+        else:        
+            result = lookupsub(sub[3])
+        for j in range(0,4):    
+            title.append(result['items'][j]['volumeInfo']['title'])
+            descr.append(result['items'][j]['volumeInfo']['publisher'])
+            imglink.append(result['items'][j]['volumeInfo']['imageLinks']['thumbnail'])
 
+    #return render_template("success.html",message=title)  
+    #return render_template('practice.html',user = session['username'],password = session['password'])
+    return render_template('indexfinal.html',user = session['username'],password = session['password'],\
+                             title=title,descr=descr,sub=sub,imglink=imglink)
 
 @app.route('/search',methods=["POST","GET"])
 # googleapikey="AIzaSyAaVB1rnJ5Yi5o4MBb4gMAzv6pHi6scTfA"
 def search():
+    # makelist of everyone
     result = lookup(request.form.get("tit"))
-    message = result['items'][0]['volumeInfo']['title']
-    
-    return render_template("success.html",message=message)
+    title=[]
+    author=[]
+    imglink=[]
+    publish_date=[]
+    page_count=[]
+    isbn10=[]
+    isbn13=[]
+    for i in range(0,4):
+        title.append(result['items'][i]['volumeInfo']['title'])
+        author.append(result['items'][i]['volumeInfo']['authors'])
+        imglink.append(result['items'][i]['volumeInfo']['imageLinks']['thumbnail'])
+        publish_date.append(result['items'][i]['volumeInfo']['publishedDate'])    
+        page_count.append(result['items'][i]['volumeInfo']['pageCount'])
+        isbn10.append(result['items'][i]['volumeInfo']['industryIdentifiers'][0]['identifier'])
+        isbn13.append(result['items'][i]['volumeInfo']['industryIdentifiers'][1]['identifier'])
+
+    return render_template("searchresult.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
+                            isbn10=isbn10,isbn13=isbn13)
+@app.route("/details",methods=['POST','GET'])
+def details():
+    result = lookupisbn(request.form.get("isbn"))
+    title=[]
+    author=[]
+    imglink=[]
+    publish_date=[]
+    page_count=[]
+    isbn10=[]
+    isbn13=[]
+    prelink=[]
+    title.append(result['items'][0]['volumeInfo']['title'])
+    author.append(result['items'][0]['volumeInfo']['authors'])
+    imglink.append(result['items'][0]['volumeInfo']['imageLinks']['thumbnail'])
+    publish_date.append(result['items'][0]['volumeInfo']['publishedDate'])    
+    page_count.append(result['items'][0]['volumeInfo']['pageCount'])
+    isbn10.append(result['items'][0]['volumeInfo']['industryIdentifiers'][0]['identifier'])
+    isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
+    prelink.append(result['items'][0]['volumeInfo']['previewLink'])
 
 
-
-
-
+    return render_template("subpage.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
+                            isbn10=isbn10,isbn13=isbn13,prelink=prelink)
 
 @app.route("/addbook",methods=['POST','GET'])
 def addbook():
-    temp = request.form.get("karle")
-    return render_template("success.html")
+    db.execute("INSERT INTO userbooks(username,password,bookid)\
+                 VALUES(:username,:password,:bookid)",\
+                 username=session['username'],password = session['password'],bookid= request.form.get("bookisbn"))
+    return render_template("success.html",message="successfullu inserted")
 
-    
-    
-    # db.execute("INSERT INTO userbook(username,password,bookid)\
-    #             VALUES(:username,:password,:bookid)",\
-    #             username=session['username'],password = session['password'])
-    
+@app.route("/mybooks",methods=['POST','GET'])
+def mybooks():
+    books = db.execute("SELECT * FROM userbooks where username=:username and password=:password",
+                    username=session['username'],password = session['password'])
+    rows = len(books)
+    author=[]
+    imglink=[]
+    publish_date=[]
+    page_count=[]
+    isbn10=[]
+    isbn13=[]
+    prelink=[]
+    for book in books:
+        result = lookupisbn(book.isbn)
+        title.append(result['items'][0]['volumeInfo']['title'])
+        author.append(result['items'][0]['volumeInfo']['authors'])
+        imglink.append(result['items'][0]['volumeInfo']['imageLinks']['thumbnail'])
+        publish_date.append(result['items'][0]['volumeInfo']['publishedDate'])    
+        page_count.append(result['items'][0]['volumeInfo']['pageCount'])
+        isbn10.append(result['items'][0]['volumeInfo']['industryIdentifiers'][0]['identifier'])
+        isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
+        prelink.append(result['items'][0]['volumeInfo']['previewLink'])
 
-app.secret_key = "secret"            
+
+    return render_template("mybooklist.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
+                            isbn10=isbn10,isbn13=isbn13,prelink=prelink)
+
+        
+    return render_template("mybooklist.html",title=title,author=author,result=result)
+                 
+    
+@app.route("/home",methods=['POST','GET'])
+def transfer():
+    return render_template("indexfinal.html")
+app.secret_key = "secret"
 if __name__ == "__main__":    
     app.config['SESSION_TYPE'] = 'filesystem'
     sess.init_app(app)
