@@ -14,7 +14,9 @@
             <li><a href="indexfinal.html">New Releases</a></li>  
             <li><a href="#">Company</a></li> 
             <li><a href="#">Contact</a></li>
-            <li><a href="{{url_for('mybooks')}}">MyBooks</a></li>             
+            <li><a href="{{url_for('mybooks')}}">MyBooks</a></li>     
+            <li><a href="{{url_for('logout')}}">Logout</a></li>            
+
 
     	</ul>
     </div> <!-- end of menu -->
@@ -48,11 +50,22 @@
                 <li>{{page_count[i]}}</li>
                 <li>ISBN 10: {{isbn10[i]}} | ISBN 13: {{isbn13[i]}}</li>
                 <li><form action="{{url_for('addbook')}}" method="post">
-                        <input id="title" name="bookisbn" value="{{isbn10[i]}}">
+                        <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">
                         <button id="button" type="submit">Click Me</button>
                 </form>
                 </li>
                 <br>
+                <li><form action="{{url_for('comment')}}" method="post">
+                    <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">
+                    <input name="comment" type="text" placeholder="Add your comment">
+                    <button id="button" type="submit">Click Me</button>
+                </form></li>
+                {% for item in rows %}
+                <li>
+                    <h3>{{ item.comment }}</h3>
+                </li>
+                {% endfor %}
+
                 <li><a href="redirect_url('prelink')">More Details</a></li>
             </ul>
              <div class="cleaner_with_height">&nbsp;</div>

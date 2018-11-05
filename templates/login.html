@@ -15,11 +15,12 @@
                 <h3>PASSWORD</h3>
                 <input type="password" id="pass" name="password" required placeholder="Enter password"><br>
                 <button type="submit" id="sub">Login</button><br>
+            </form>
                 <div>
-                    <span><br>Do not have account<br><button id="signup">SIGNUP</button>
+                    <span><br>Do not have account<br><a id="signup" href="{{ url_for('register') }}">SIGNUP</a>
                     <!-- <button id="forgot"style="margin-left: 220px">FORGOT</button></span> -->
                 </div>
-            </form>
+           
         </div>
     </body>
 </html>

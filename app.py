@@ -9,15 +9,23 @@ db = SQL("sqlite:///books.db")
 
 @app.route("/")
 def index():
-    return render_template("login.html")
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return render_template('indexfinal.html')
 
 @app.route("/register",methods=["POST","GET"])
 def register():
-    result = db.execute("INSERT INTO users(username,password)\
+    if request.method == "POST":
+        result = db.execute("INSERT INTO users(username,password)\
                         VALUES(:username,:password)",\
                         username = request.form.get("username"),password = request.form.get("password"))
-
-    return "Registered Successfuly"
+        return "Registered Successfuly"
+    else:
+        return render_template("signup.html")
+def logout():
+    session['logged_in'] = False
+    return index()
 
 @app.route("/login",methods=["POST","GET"])
 def login():
@@ -108,22 +116,24 @@ def details():
     isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
     prelink.append(result['items'][0]['volumeInfo']['previewLink'])
 
+    rows = db.execute("Select * from comments where bookid=:bookid",bookid=request.form.get("isbn"))
 
     return render_template("subpage.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
-                            isbn10=isbn10,isbn13=isbn13,prelink=prelink)
+                            isbn10=isbn10,isbn13=isbn13,prelink=prelink,rows=rows)
 
 @app.route("/addbook",methods=['POST','GET'])
 def addbook():
     db.execute("INSERT INTO userbooks(username,password,bookid)\
                  VALUES(:username,:password,:bookid)",\
                  username=session['username'],password = session['password'],bookid= request.form.get("bookisbn"))
-    return render_template("success.html",message="successfullu inserted")
+    return render_template("success.html",message="successfully inserted")
 
 @app.route("/mybooks",methods=['POST','GET'])
 def mybooks():
-    books = db.execute("SELECT * FROM userbooks where username=:username and password=:password",
+    
+    results= db.execute("SELECT bookid FROM userbooks where username=:username and password=:password",
                     username=session['username'],password = session['password'])
-    rows = len(books)
+    rows=len(results)
     author=[]
     imglink=[]
     publish_date=[]
@@ -131,8 +141,9 @@ def mybooks():
     isbn10=[]
     isbn13=[]
     prelink=[]
-    for book in books:
-        result = lookupisbn(book.isbn)
+    title=[]
+    for i in range(0,rows):
+        result = lookupisbn(str(results[i]['bookid']))
         title.append(result['items'][0]['volumeInfo']['title'])
         author.append(result['items'][0]['volumeInfo']['authors'])
         imglink.append(result['items'][0]['volumeInfo']['imageLinks']['thumbnail'])
@@ -141,15 +152,18 @@ def mybooks():
         isbn10.append(result['items'][0]['volumeInfo']['industryIdentifiers'][0]['identifier'])
         isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
         prelink.append(result['items'][0]['volumeInfo']['previewLink'])
-
-
     return render_template("mybooklist.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
-                            isbn10=isbn10,isbn13=isbn13,prelink=prelink)
-
-        
-    return render_template("mybooklist.html",title=title,author=author,result=result)
+                             isbn10=isbn10,isbn13=isbn13,prelink=prelink)
                  
-    
+    #return render_template("success.html",message=result)
+
+@app.route("/comment",methods=['POST','GET'])
+def comment():
+    db.execute("INSERT INTO comments(bookid,comment)\
+                 VALUES(:bookid,:comment)",\
+                 comment=request.form.get('comment'),bookid= request.form.get("bookisbn"))
+    return render_template("success.html",message="successfully inserted")
+
 @app.route("/home",methods=['POST','GET'])
 def transfer():
     return render_template("indexfinal.html")
