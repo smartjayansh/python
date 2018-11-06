@@ -8,11 +8,11 @@ app = Flask(__name__)
 db = SQL("sqlite:///books.db")
 
 @app.route("/")
-def index():
+def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return render_template('indexfinal.html')
+        return index()
 
 @app.route("/register",methods=["POST","GET"])
 def register():
@@ -23,9 +23,10 @@ def register():
         return "Registered Successfuly"
     else:
         return render_template("signup.html")
+@app.route("/logout",methods=["POST","GET"])
 def logout():
     session['logged_in'] = False
-    return index()
+    return home()
 
 @app.route("/login",methods=["POST","GET"])
 def login():
@@ -49,9 +50,15 @@ def login():
     if len(rows) != 1:
         message="invalid username and/or password"
         return render_template("success.html",message=message)
-    message="login successful"
+    session['logged_in'] = True
+
+    return index()
+
+@app.route("/index")
+def index():
     title=[]
     descr=[]
+    isbn=[]
     sub=["comedy","adventure","technology","cooking"]
     imglink=[]
     for i in range(0,4):
@@ -67,11 +74,11 @@ def login():
             title.append(result['items'][j]['volumeInfo']['title'])
             descr.append(result['items'][j]['volumeInfo']['publisher'])
             imglink.append(result['items'][j]['volumeInfo']['imageLinks']['thumbnail'])
+            isbn.append(result['items'][j]['volumeInfo']['industryIdentifiers'][0]['identifier'])
+    #return render_template("success.html",message=isbn)
 
-    #return render_template("success.html",message=title)  
-    #return render_template('practice.html',user = session['username'],password = session['password'])
     return render_template('indexfinal.html',user = session['username'],password = session['password'],\
-                             title=title,descr=descr,sub=sub,imglink=imglink)
+                             title=title,descr=descr,sub=sub,imglink=imglink,isbn=isbn)
 
 @app.route('/search',methods=["POST","GET"])
 # googleapikey="AIzaSyAaVB1rnJ5Yi5o4MBb4gMAzv6pHi6scTfA"
@@ -144,18 +151,18 @@ def mybooks():
     title=[]
     for i in range(0,rows):
         result = lookupisbn(str(results[i]['bookid']))
-        title.append(result['items'][0]['volumeInfo']['title'])
         author.append(result['items'][0]['volumeInfo']['authors'])
         imglink.append(result['items'][0]['volumeInfo']['imageLinks']['thumbnail'])
         publish_date.append(result['items'][0]['volumeInfo']['publishedDate'])    
         page_count.append(result['items'][0]['volumeInfo']['pageCount'])
         isbn10.append(result['items'][0]['volumeInfo']['industryIdentifiers'][0]['identifier'])
+        title.append(result['items'][0]['volumeInfo']['title'])
         isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
         prelink.append(result['items'][0]['volumeInfo']['previewLink'])
     return render_template("mybooklist.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
                              isbn10=isbn10,isbn13=isbn13,prelink=prelink)
                  
-    #return render_template("success.html",message=result)
+    #return render_template("success.html",message=result['items'][0]['volumeInfo']['title'])
 
 @app.route("/comment",methods=['POST','GET'])
 def comment():

@@ -297,7 +297,8 @@ img {
 
 .templatemo_product_box .product_info {
 	float: left;
-	width: 180px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .product_info p {

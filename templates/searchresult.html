@@ -8,7 +8,7 @@
 <div id="templatemo_container">
 	<div id="templatemo_menu">
     	<ul>
-            <li><a href="{{ url_for('transfer')}}">Home</a></li>
+            <li><a href="{{ url_for('index')}}">Home</a></li>
             <li><a href="#" class="current">Search</a></li>
             <li><a href="indexfinal.html">Books</a></li>            
             <li><a href="indexfinal.html">New Releases</a></li>  
@@ -65,9 +65,13 @@
             <div class="image_panel"><img src="{{imglink[i]}}" alt="Book cover" width="100" height="150" /></div>
           
             <ul>
-                <li>{{author[i]}}</li>
+                <li>Authors:- 
+            {% for auth in author[i] %}
+                <span>{{auth}} </span>
+            {% endfor %}
+                </li>
                 <li><form action="{{url_for('details')}}" method="post">
-                    <input type="text" value="{{isbn10[i]}}" name="isbn">
+                    <input type="text" value="{{isbn10[i]}}" name="isbn" style="display:none">
                     <button  type="submit" >Details</button>
                 </form></li>
             </ul>

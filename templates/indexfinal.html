@@ -8,7 +8,7 @@
 <div id="templatemo_container">
 	<div id="templatemo_menu">
     	<ul>
-            <li><a href="{{ url_for('transfer')}}" class="current">Home</a></li>
+            <li><a href="#" class="current">Home</a></li>
             <li><a href="subpage.html">Search</a></li>
             <li><a href="subpage.html">Books</a></li>            
             <li><a href="subpage.html">New Releases</a></li>  
@@ -21,25 +21,6 @@
     	</ul>
     </div> 
     
-    <!-- <div id="templatemo_header">
-    	<div id="templatemo_special_offers">
-        	<p>
-                <span>25%</span> discounts for
-        purchase over $80
-        	</p>
-			<a href="subpage.html" style="margin-left: 50px;">Read more...</a>
-        </div>
-        
-        
-        <div id="templatemo_new_books">
-        	<ul>
-                <li>Suspen disse</li>
-                <li>Maece nas metus</li>
-                <li>In sed risus ac feli</li>
-            </ul>
-            <a href="subpage.html" style="margin-left: 50px;">Read more...</a>
-        </div>
-    </div> <-- end of header -->
      
     <div id="templatemo_content">
     	
@@ -49,9 +30,7 @@
                 <form action="{{url_for('search')}}" method="post">
                     <input id="title" name="tit" placeholder="Title">
                     <button id="button" type="submit">Click Me</button>
-                </form>
-            
-                
+                </form>            
             </div>
           
             <div class="templatemo_content_left_section">                
@@ -60,16 +39,21 @@
         
         <div id="templatemo_content_right">
             {% for j in range(0,4,2) %}
+            <br>
                 <h2>{{sub[0]}} Books</h2>
-
+<br>
         	<div class="templatemo_product_box">
             	<h1>{{title[j]}}</h1>
          	      <img src="{{imglink[j]}}" alt="image" />
                 <div class="product_info">
-                	<p>{{title[j]}}</p>
+                	
                   <h3>{{descr[j]}}</h3>
-                    <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                    <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                
+            <div><form action="{{url_for('details')}}" method="post">
+                <input type="text" value="{{isbn[j]}}" name="isbn" style="display:none">
+                <button class="detail_button" type="submit" >Details</button>
+            </form>
+          </div>
                 </div>
                 <div class="cleaner">&nbsp;</div>
             </div>
@@ -80,10 +64,14 @@
                     <h1>{{title[j+1]}}</h1>
                        <img src="{{imglink[j+1]}}" alt="image" />
                     <div class="product_info">
-                        <p>{{title[j+1]}}</p>
+                        
                       <h3>{{descr[j+1]}}</h3>
-                        <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                        <div class="detail_button"><a href="subpage.html">Detail</a></div>
+        
+                      <div><form action="{{url_for('details')}}" method="post">
+                        <input type="text" value="{{isbn[j+1]}}" name="isbn" style="display:none">
+                        <button class="detail_button" type="submit" >Details</button>
+                    </form>
+                  </div>
                     </div>
                     <div class="cleaner">&nbsp;</div>
                 </div>
@@ -92,16 +80,21 @@
     {% endfor %}
 
     {% for j in range(4,8,2) %}
+    <br>
                 <h2>{{sub[1]}} Books</h2>
-
+<br>
         	<div class="templatemo_product_box">
-            	<h1>{{title[j]}}</h1>
+            	
          	      <img src="{{imglink[j]}}" alt="image" />
                 <div class="product_info">
-                	<p>{{title[j]}}</p>
+                
                   <h3>{{descr[j]}}</h3>
-                    <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                    <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                    
+            <div><form action="{{url_for('details')}}" method="post">
+                <input type="text" value="{{isbn[j]}}" name="isbn" style="display:none">
+                <button class="detail_button" type="submit" >Details</button>
+            </form>
+          </div>
                 </div>
                 <div class="cleaner">&nbsp;</div>
             </div>
@@ -112,10 +105,14 @@
                     <h1>{{title[j+1]}}</h1>
                        <img src="{{imglink[j+1]}}" alt="image" />
                     <div class="product_info">
-                        <p>{{title[j+1]}}</p>
+                    
                       <h3>{{descr[j+1]}}</h3>
-                        <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                        <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                        
+            <div><form action="{{url_for('details')}}" method="post">
+                <input type="text" value="{{isbn[j+1]}}" name="isbn" style="display:none">
+                <button class="detail_button" type="submit" >Details</button>
+            </form>
+          </div>
                     </div>
                     <div class="cleaner">&nbsp;</div>
                 </div>
@@ -124,16 +121,21 @@
     {% endfor %}
 
     {% for j in range(8,12,2) %}
+    <br>
                 <h2>{{sub[2]}} Books</h2>
-
+<br>
         	<div class="templatemo_product_box">
             	<h1>{{title[j]}}</h1>
          	      <img src="{{imglink[j]}}" alt="image" />
                 <div class="product_info">
-                	<p>{{title[j]}}</p>
+                
                   <h3>{{descr[j]}}</h3>
-                    <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                    <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                    
+            <div><form action="{{url_for('details')}}" method="post">
+                <input type="text" value="{{isbn[j]}}" name="isbn" style="display:none">
+                <button class="detail_button" type="submit" >Details</button>
+            </form>
+          </div>
                 </div>
                 <div class="cleaner">&nbsp;</div>
             </div>
@@ -144,10 +146,14 @@
                     <h1>{{title[j+1]}}</h1>
                        <img src="{{imglink[j+1]}}" alt="image" />
                     <div class="product_info">
-                        <p>{{title[j+1]}}</p>
+                    
                       <h3>{{descr[j+1]}}</h3>
-                        <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                        <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                        
+            <div><form action="{{url_for('details')}}" method="post">
+                <input type="text" value="{{isbn[j+1]}}" name="isbn" style="display:none">
+                <button class="detail_button" type="submit" >Details</button>
+            </form>
+          </div>
                     </div>
                     <div class="cleaner">&nbsp;</div>
                 </div>
@@ -156,16 +162,20 @@
     {% endfor %}
 
     {% for j in range(12,16,2) %}
+    <br>
                 <h2>{{sub[3]}} Books</h2>
-
+<br>
         	<div class="templatemo_product_box">
             	<h1>{{title[j]}}</h1>
          	      <img src="{{imglink[j]}}" alt="image" />
                 <div class="product_info">
-                	<p>{{title[j]}}</p>
+                
                   <h3>{{descr[j]}}</h3>
-                    <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                    <div class="detail_button"><a href="subpage.html">Detail</a></div>
+            <div><form action="{{url_for('details')}}" method="post">
+                  <input type="text" value="{{isbn[j]}}" name="isbn" style="display:none">
+                  <button class="detail_button" type="submit" >Details</button>
+              </form>
+            </div>
                 </div>
                 <div class="cleaner">&nbsp;</div>
             </div>
@@ -176,10 +186,13 @@
                     <h1>{{title[j+1]}}</h1>
                        <img src="{{imglink[j+1]}}" alt="image" />
                     <div class="product_info">
-                        <p>{{title[j+1]}}</p>
+                        
                       <h3>{{descr[j+1]}}</h3>
-                        <div class="buy_now_button"><a href="subpage.html">Buy Now</a></div>
-                        <div class="detail_button"><a href="subpage.html">Detail</a></div>
+                      <div><form action="{{url_for('details')}}" method="post">
+                        <input type="text" value="{{isbn[j]}}" name="isbn" style="display:none">
+                        <button class="detail_button" type="submit" >Details</button>
+                    </form>
+                  </div>
                     </div>
                     <div class="cleaner">&nbsp;</div>
                 </div>
