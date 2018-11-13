@@ -10,9 +10,9 @@
     	<ul>
             <li><a href="{{ url_for('index')}}">Home</a></li>
             <li><a href="#" class="current">Search</a></li>
-            <li><a href="indexfinal.html">Books</a></li>            
-            <li><a href="indexfinal.html">New Releases</a></li>  
-            <li><a href="#">Company</a></li> 
+            <!-- <li><a href="indexfinal.html">Books</a></li>             -->
+            <!-- <li><a href="indexfinal.html">New Releases</a></li>   -->
+            <!-- <li><a href="#">Company</a></li>  -->
             <li><a href="#">Contact</a></li>
             <li><a href="{{url_for('mybooks')}}">MyBooks</a></li>     
             <li><a href="{{url_for('logout')}}">Logout</a></li>            
@@ -54,15 +54,15 @@
                 <li>Page Count:  {{page_count[i]}}</li>
                 <li>ISBN 10: {{isbn10[i]}} | ISBN 13: {{isbn13[i]}}</li>
                 <li><form action="{{url_for('addbook')}}" method="post">
-                        <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">
-                        <button id="button" type="submit">Click Me</button>
+                        <input id="title" name="bookisbn" value="{{isbn13[i]}}" style="display:none">
+                        <button id="button" type="submit">Add to List</button>
                 </form>
                 </li>
                 <br>
                 <li><form action="{{url_for('comment')}}" method="post">
                     <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">
                     <input name="comment" type="text" placeholder="Add your comment">
-                    <button id="button" type="submit">Click Me</button>
+                    <button id="button" type="submit">Comment</button>
                 </form></li>
                 {% for item in rows %}
                 <li>

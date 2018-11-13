@@ -20,7 +20,7 @@ def register():
         result = db.execute("INSERT INTO users(username,password)\
                         VALUES(:username,:password)",\
                         username = request.form.get("username"),password = request.form.get("password"))
-        return "Registered Successfuly"
+        return render_template("login.html")
     else:
         return render_template("signup.html")
 @app.route("/logout",methods=["POST","GET"])
@@ -53,6 +53,13 @@ def login():
     session['logged_in'] = True
 
     return index()
+@app.route("/forgot",methods=["POST","GET"])
+def forgot():
+    if request.method == "POST":
+
+    else:
+        return render_template("forgotpassword.html") 
+    return ""
 
 @app.route("/index")
 def index():
@@ -159,10 +166,9 @@ def mybooks():
         title.append(result['items'][0]['volumeInfo']['title'])
         isbn13.append(result['items'][0]['volumeInfo']['industryIdentifiers'][1]['identifier'])
         prelink.append(result['items'][0]['volumeInfo']['previewLink'])
-    return render_template("mybooklist.html",title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,\
-                             isbn10=isbn10,isbn13=isbn13,prelink=prelink)
+    return render_template("mybooklist.html",rows=rows,title=title,author=author,imglink=imglink,publish_date=publish_date,page_count=page_count,isbn10=isbn10,isbn13=isbn13,prelink=prelink)
                  
-    #return render_template("success.html",message=result['items'][0]['volumeInfo']['title'])
+    # return render_template("success.html",message=result['items'][0]['volumeInfo']['title'])
 
 @app.route("/comment",methods=['POST','GET'])
 def comment():
