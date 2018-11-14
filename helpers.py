@@ -4,7 +4,7 @@ import urllib.parse
 from flask import redirect, render_template, request, session, url_for
 from functools import wraps
 
-
+#$env:FLASK_ENV = "development"
 def lookup(symbol):
     """Look up quote for symbol."""
     # Contact API

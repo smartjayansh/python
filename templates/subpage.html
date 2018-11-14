@@ -53,11 +53,13 @@
             	<li>Published on:  {{publish_date[i]}}</li>
                 <li>Page Count:  {{page_count[i]}}</li>
                 <li>ISBN 10: {{isbn10[i]}} | ISBN 13: {{isbn13[i]}}</li>
+                {% if trulist[i] %}
                 <li><form action="{{url_for('addbook')}}" method="post">
                         <input id="title" name="bookisbn" value="{{isbn13[i]}}" style="display:none">
                         <button id="button" type="submit">Add to List</button>
                 </form>
                 </li>
+                {% endif %}
                 <br>
                 <li><form action="{{url_for('comment')}}" method="post">
                     <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">
@@ -70,7 +72,7 @@
                 </li>
                 {% endfor %}
 
-                <li><a href="redirect_url('prelink')">More Details</a></li>
+                <li><a href="{{ prelink[0] }}">More Details</a></li>
             </ul>
              <div class="cleaner_with_height">&nbsp;</div>
             {% endfor %}
