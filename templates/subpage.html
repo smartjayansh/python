@@ -60,6 +60,16 @@
                 </form>
                 </li>
                 {% endif %}
+
+                {% if not trulist[i] %}
+                <li><form action="{{url_for('remove')}}" method="post">
+                        <input id="title" name="bookisbn" value="{{isbn13[i]}}" style="display:none">
+                        <button id="button" type="submit">Remove from List</button>
+                </form>
+                </li>
+                {% endif %}
+
+
                 <br>
                 <li><form action="{{url_for('comment')}}" method="post">
                     <input id="title" name="bookisbn" value="{{isbn10[i]}}" style="display:none">

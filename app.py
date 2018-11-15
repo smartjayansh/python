@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 db = SQL("sqlite:///books.db")
 
-
 @app.route("/send")
 def send():
     num=random.randint(100,800)
@@ -25,7 +24,7 @@ def send():
     s.starttls() 
 
     # Authentication 
-    s.login("sender gmail", "password") 
+    s.login("sender gmail", "password")     
 
     # message to be sent 
     msg = "\r\n".join([
@@ -43,7 +42,11 @@ def send():
     return "successful" + str(num)
 
 
-
+@app.route("/remove",methods=["POST","GET"])
+def remove():
+    db.execute("DELETE FROM userbooks where username=:username and bookid=:bookid",\
+                username=session['username'],bookid=request.form.get('bookisbn'))
+    return "Successfully deleted"
 
 
 @app.route("/")
@@ -51,15 +54,22 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return index()
+        return index()  
 
 @app.route("/register",methods=["POST","GET"])
 def register():
     if request.method == "POST":
-        result = db.execute("INSERT INTO users(username,password)\
-                        VALUES(:username,:password)",\
-                        username = request.form.get("username"),password = request.form.get("password"))
-        return render_template("login.html")
+        email = request.form.get("email")
+        valid = emailcheck(email)
+        # return render_template("success.html",message=valid['smtp_check'])
+        if valid['smtp_check'] == True:
+            result = db.execute("INSERT INTO users(username,password,email)\
+                            VALUES(:username,:password,:useremail)",\
+                            username = request.form.get("username"),password = request.form.get("password"),useremail=email)
+            return render_template("login.html")
+        else:
+            return render_template("success.html",message="Email not valid")
+
     else:
         return render_template("signup.html")
 @app.route("/logout",methods=["POST","GET"])
